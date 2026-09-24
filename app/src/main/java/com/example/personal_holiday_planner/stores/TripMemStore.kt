@@ -12,9 +12,28 @@ class TripMemStore {
         return trips
     }
 
+    fun findOne(id: Long): TripModel? {
+        return trips.find { t -> t.id ==id }
+    }
+
     fun create(trip: TripModel) {
         trip.id = lastId.incrementAndGet()
         trips.add(trip)
     }
+
+    fun update(trip: TripModel): Boolean {
+        val foundTrip = findOne(trip.id)
+        return if (foundTrip != null) {
+            foundTrip.destination = trip.destination
+            foundTrip.startDate = trip.startDate
+            foundTrip.endDate = trip.endDate
+            foundTrip.budget = trip.budget#
+            true
+        }
+        else{
+            false
+        }
+    }
+
 
 }
