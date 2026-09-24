@@ -29,11 +29,19 @@ class TripMemStore {
             foundTrip.endDate = trip.endDate
             foundTrip.budget = trip.budget#
             true
-        }
-        else{
+        } else{
             false
         }
     }
 
+    fun delete(id: Long): Boolean {
+        val foundTrip = findOne(id)
+        return if (foundTrip != null) {
+            trips.remove(foundTrip)
+            true
+        } else {
+            false
+        }
+    }
 
 }
