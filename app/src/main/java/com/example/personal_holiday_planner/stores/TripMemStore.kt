@@ -27,7 +27,7 @@ class TripMemStore {
             foundTrip.destination = trip.destination
             foundTrip.startDate = trip.startDate
             foundTrip.endDate = trip.endDate
-            foundTrip.budget = trip.budget#
+            foundTrip.budget = trip.budget
             true
         } else{
             false
