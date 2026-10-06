@@ -12,6 +12,8 @@ fun main(){
         input = menu()
         when (input) {
             1 -> addTrip()
+            2 -> listTrips()
+            3 -> updateTrip()
             else -> println("\n Invalid option. Please try again.")
         }
     }
@@ -37,7 +39,7 @@ fun addTrip() {
     print("Enter Destination: ")
     val destination = readlnOrNull()?.trim().orEmpty()
     print("Enter Budget: ")
-    val budget = readlnOrNull()?.trim()?.toDoubleOrNull() ?: 0.0    #
+    val budget = readlnOrNull()?.trim()?.toDoubleOrNull() ?: 0.0
     print("Start Date: ")
     val startDate = readlnOrNull()?.trim().orEmpty()
     print("End Date")
@@ -54,5 +56,44 @@ fun addTrip() {
         println("Trip added successfully with ID: ${trip.id}")
     } else {
         println("Title cannot be empty. Unable to create trip")
+    }
+}
+
+fun listTrips() {
+    println("\n--- All Trips ---")
+    val trips = store.findAll()
+    if(trips.isEmpty()) {
+        println("No trips made yet.")
+    } else {
+        trips.forEach { println("ID: ${it.id} | Destination: ${it.destination} | Budget: ${it.budget} | Start Date: ${it.startDate} | End Date: ${it.endDate}") }
+    }
+}
+
+fun updateTrip() {
+    println("\n--- Update Trip ---")
+    listTrips()
+    if (store.findAll().isEmpty()) return
+
+    print("\n Enter ID of Trip to update: ")
+    val id = readlnOrNull()?.toLongOrNull()
+
+    if (id != null && store.findOne(id) != null) {
+        print("Enter new Destination: ")
+        val destination = readlnOrNull()?.trim().orEmpty()
+        print("Enter new Budget: ")
+        val budget = readlnOrNull()?.trim()?.toDoubleOrNull() ?: 0.0
+        print("Enter new Start Date: ")
+        val startDate = readlnOrNull()?.trim().orEmpty()
+        print("Enter new End Date")
+        val endDate = readlnOrNull()?.trim().orEmpty()
+
+        if (destination.isNotEmpty()) {
+            val updated = store.update(TripModel(id = id, destination = destination, budget = budget, startDate = startDate, endDate = endDate))
+            if (updated) println("Trip updated successfully.")
+        } else {
+            println("Trip cannot be empty. Update cancelled.")
+        }
+    } else {
+        println("Trip with ID $id not found.")
     }
 }
