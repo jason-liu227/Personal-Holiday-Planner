@@ -14,6 +14,8 @@ fun main(){
             1 -> addTrip()
             2 -> listTrips()
             3 -> updateTrip()
+            4 -> deleteTrip()
+            5 -> searchTrip()
             else -> println("\n Invalid option. Please try again.")
         }
     }
@@ -95,5 +97,42 @@ fun updateTrip() {
         }
     } else {
         println("Trip with ID $id not found.")
+    }
+}
+
+fun deleteTrip() {
+    println("\n--- Delete Trip ---")
+    listTrips()
+    if (store.findAll().isEmpty()) return
+
+    print("\nEnter ID of Trip to delete: ")
+    val id = readlnOrNull()?.toLongOrNull()
+
+    if (id != null) {
+        val deleted = store.delete(id)
+        if (deleted) {
+            println("Trip with ID $id deleted successfully.")
+        } else {
+            println("Trip with ID $id not found.")
+        }
+    } else {
+        println("Invalid ID entered.")
+    }
+}
+
+fun searchTrip() {
+    println("\n--- Search Trip ---")
+    print("Enter ID: ")
+    val id = readlnOrNull()?.toLongOrNull()
+
+    if (id != null) {
+        val trip = store.findOne(id)
+        if (trip != null) {
+            println("Found: ID: ${trip.id} | Destination: ${trip.destination} | Budget: ${trip.budget} | Start Date: ${trip.startDate} | End Date: ${trip.endDate}")
+        } else {
+            println("No trip found with ID $id.")
+        }
+    } else {
+        println("Invalid ID entered.")
     }
 }
