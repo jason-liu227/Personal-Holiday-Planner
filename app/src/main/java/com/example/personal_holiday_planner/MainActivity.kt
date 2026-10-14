@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         }
         val viewTripsButton = findViewById<Button>(R.id.viewTripsButton)
 
-        val addTripButton = findViewById<Button>(R.id.addTripButton)
+        val addTripButton = findViewById<Button>(R.id.returnButton)
 
         viewTripsButton.setOnClickListener {
             startActivity(
