@@ -10,30 +10,36 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/planner_background"
         android:orientation="vertical"
         tools:layout_editor_absoluteX="1dp"
         tools:layout_editor_absoluteY="1dp">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="51dp"
+            android:layout_height="wrap_content"
             android:text="Holiday Planner"
             android:textAlignment="center"
-            android:textSize="32sp"
+            android:textColor="@color/planner_teal"
+            android:textSize="28sp"
             android:textStyle="bold" />
 
         <Button
             android:id="@+id/viewTripsButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:layout_marginTop="24dp"
-            android:text="View Planned Trips" />
+            android:backgroundTint="@color/planner_teal"
+            android:text="View Planned Trips"
+            android:textColor="@color/planner_white" />
 
         <Button
             android:id="@+id/returnButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:layout_marginTop="16dp"
-            android:text="Plan Trip" />
+            android:backgroundTint="@color/planner_teal"
+            android:text="Plan Trip"
+            android:textColor="@color/planner_white" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
