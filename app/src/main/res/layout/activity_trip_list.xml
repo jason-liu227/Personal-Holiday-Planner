@@ -10,30 +10,36 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/planner_background"
         android:orientation="vertical"
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="444dp">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="51dp"
-            android:text="Holiday Planner"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="My Trips"
             android:textAlignment="center"
-            android:textSize="32sp"
+            android:textColor="@color/planner_teal"
+            android:textSize="24sp"
             android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/tripsRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginTop="10dp"
             android:layout_weight="1" />
 
         <Button
             android:id="@+id/returnButton"
             android:layout_width="match_parent"
-            android:layout_height="74dp"
-            android:layout_marginTop="0dp"
-            android:text="Back To Menu" />
+            android:layout_height="56dp"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="@color/planner_teal"
+            android:text="Back To Menu"
+            android:textColor="@color/planner_white" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

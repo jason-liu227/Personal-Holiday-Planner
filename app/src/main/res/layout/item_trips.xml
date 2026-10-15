@@ -8,6 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/planner_background"
         android:orientation="vertical"
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="-392dp">
@@ -15,7 +16,8 @@
         <TextView
             android:id="@+id/destinationText"
             android:layout_width="match_parent"
-            android:layout_height="36dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/planner_navy"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -23,32 +25,42 @@
             android:id="@+id/budgetText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp" />
+            android:layout_marginTop="8dp"
+            android:textColor="@color/planner_secondary"
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/dateText"
             android:layout_width="wrap_content"
-            android:layout_height="18dp"
-            android:textSize="16sp" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/planner_secondary"
+            android:textSize="14sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            android:padding="12dp">
 
             <Button
                 android:id="@+id/editButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Edit" />
+                android:backgroundTint="@color/planner_teal"
+                android:text="Edit"
+                android:textColor="@color/planner_white" />
 
             <Button
                 android:id="@+id/deleteButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Delete" />
+                android:backgroundTint="@color/planner_red"
+                android:text="Delete"
+                android:textColor="@color/planner_white" />
         </LinearLayout>
 
     </LinearLayout>
