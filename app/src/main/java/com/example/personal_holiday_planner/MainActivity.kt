@@ -18,9 +18,14 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
         val viewTripsButton = findViewById<Button>(R.id.viewTripsButton)
 
         val addTripButton = findViewById<Button>(R.id.returnButton)
+
+        val viewTab = findViewById<Button>(R.id.viewTab)
+
+        val addTab = findViewById<Button>(R.id.addTab)
 
         viewTripsButton.setOnClickListener {
             startActivity(
@@ -33,5 +38,20 @@ class MainActivity : AppCompatActivity() {
                 Intent(this, AddEditActivity::class.java)
             )
         }
+
+        viewTab.setOnClickListener {
+            startActivity(
+                Intent(this, TripListActivity::class.java)
+            )
+        }
+
+        addTab.setOnClickListener {
+            startActivity(
+                Intent(this, AddEditActivity::class.java)
+            )
+        }
+
+
+
     }
 }
