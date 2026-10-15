@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <ScrollView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:layout_editor_absoluteX="1dp"
         tools:layout_editor_absoluteY="1dp">
@@ -14,15 +14,18 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/planner_teal"
             android:orientation="vertical"
             android:padding="32dp">
 
             <TextView
                 android:id="@+id/formTitle"
-                android:layout_width="335dp"
-                android:layout_height="45dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/planner_teal"
                 android:text="Plan Trip"
                 android:textAlignment="center"
+                android:textColor="@color/planner_teal"
                 android:textSize="28sp"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -54,23 +57,25 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="date"
-        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteX="-21dp"
         tools:layout_editor_absoluteY="337dp" />
 
     <EditText
         android:id="@+id/endDateInput"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="188dp"
+        android:layout_height="46dp"
         android:ems="10"
         android:inputType="date"
-        tools:layout_editor_absoluteX="225dp"
-        tools:layout_editor_absoluteY="337dp" />
+        tools:layout_editor_absoluteX="221dp"
+        tools:layout_editor_absoluteY="336dp" />
 
     <Button
         android:id="@+id/saveButton"
         android:layout_width="117dp"
         android:layout_height="62dp"
+        android:backgroundTint="@color/planner_teal"
         android:text="Save"
+        android:textColor="@color/planner_white"
         app:layout_constraintStart_toStartOf="parent"
         tools:layout_editor_absoluteY="546dp" />
 
@@ -78,8 +83,10 @@
         android:id="@+id/cancelButton"
         android:layout_width="117dp"
         android:layout_height="62dp"
-        android:layout_marginStart="276dp"
+        android:layout_marginStart="292dp"
+        android:backgroundTint="@color/planner_red"
         android:text="Cancel"
+        android:textColor="@color/planner_white"
         app:layout_constraintStart_toStartOf="parent"
         tools:layout_editor_absoluteY="546dp" />
 
