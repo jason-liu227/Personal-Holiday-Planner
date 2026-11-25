@@ -3,35 +3,28 @@ package com.example.personal_holiday_planner
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.personal_holiday_planner.models.TripModel
+import timber.log.Timber
 
 class TripAdapter(
     private var trips: List<TripModel>,
-    private val onEdit: (TripModel) -> Unit,
-    private val onDelete: (TripModel) -> Unit
+    private val listener: OnTripListener
 ) : RecyclerView.Adapter<TripAdapter.TripViewHolder>() {
 
     class TripViewHolder(itemView: View) :
-            RecyclerView.ViewHolder(itemView) {
+        RecyclerView.ViewHolder(itemView) {
 
-                val destinationText: TextView =
-                    itemView.findViewById(R.id.destinationText)
+        val destinationText: TextView =
+            itemView.findViewById(R.id.destinationText)
 
-                val budgetText: TextView =
-                    itemView.findViewById(R.id.budgetText)
+        val budgetText: TextView =
+            itemView.findViewById(R.id.budgetText)
 
-                val dateText: TextView =
-                    itemView.findViewById(R.id.dateText)
-
-                val editButton: Button =
-                    itemView.findViewById(R.id.editButton)
-
-                val deleteButton: Button =
-                    itemView.findViewById(R.id.deleteButton)
-            }
+        val dateText: TextView =
+            itemView.findViewById(R.id.dateText)
+    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -50,30 +43,48 @@ class TripAdapter(
     ) {
         val trip = trips[position]
 
-        holder.destinationText.text =
-            "${trip.id}: ${trip.destination}"
+        holder.destinationText.text = trip.destination
 
-        holder.budgetText.text =
-            "Budget: ${trip.budget}"
+        holder.budgetText.text = "Budget: €${trip.budget}"
 
         holder.dateText.text =
             "${trip.startDate} - ${trip.endDate}"
 
-        holder.editButton.setOnClickListener {
-            onEdit(trip)
+        holder.itemView.setOnClickListener {
+            val currentPosition = holder.bindingAdapterPosition
+
+            if (currentPosition != RecyclerView.NO_POSITION) {
+                val selectedTrip = trips[currentPosition]
+
+                Timber.d("Trip clicked: id=${selectedTrip.id}")
+
+                listener.onTripClick(selectedTrip)
+            }
         }
 
-        holder.deleteButton.setOnClickListener {
-            onDelete(trip)
+        holder.itemView.setOnLongClickListener {
+            val currentPosition = holder.bindingAdapterPosition
+
+            if (currentPosition != RecyclerView.NO_POSITION) {
+                val selectedTrip = trips[currentPosition]
+
+                Timber.d("Trip long clicked: id=${selectedTrip.id}")
+
+                listener.onTripLongClick(selectedTrip)
+            } else {
+                false
+            }
         }
     }
 
-    override fun getItemCount(): Int{
+    override fun getItemCount(): Int {
         return trips.size
     }
 
     fun updateTrips(newTrips: List<TripModel>) {
         trips = newTrips
         notifyDataSetChanged()
+
+        Timber.d("Trip list refreshed: ${trips.size} trips")
     }
 }

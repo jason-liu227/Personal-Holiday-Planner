@@ -10,10 +10,17 @@ import android.content.Intent
 import android.content.res.Configuration
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
+import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (Timber.treeCount == 0) {
+            Timber.plant(Timber.DebugTree())
+        }
+
+        Timber.d("Personal Holiday Planner started")
+
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainTitle)) { v, insets ->
