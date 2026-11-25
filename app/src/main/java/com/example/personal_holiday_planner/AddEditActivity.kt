@@ -7,6 +7,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.personal_holiday_planner.models.TripModel
+import timber.log.Timber
 
 class AddEditActivity : AppCompatActivity() {
 
@@ -20,12 +21,16 @@ class AddEditActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Timber logging
+        Timber.d("AddEditActivity opened")
+
         createUserInterface()
-
         editingId = intent.getLongExtra("id", -1L)
-
         if (editingId != -1L) {
+            Timber.d("Editing trip id=$editingId")
             loadExistingTrip(editingId!!)
+        } else {
+            Timber.d("Creating a new holiday trip")
         }
     }
 
@@ -58,6 +63,7 @@ class AddEditActivity : AppCompatActivity() {
         val saveButton = Button(this).apply {
             text = "Save Trip"
             setOnClickListener {
+                Timber.d("Save Trip button clicked")
                 saveTrip()
             }
         }
@@ -65,6 +71,7 @@ class AddEditActivity : AppCompatActivity() {
         val cancelButton = Button(this).apply {
             text = "Cancel"
             setOnClickListener {
+                Timber.d("Trip form cancelled")
                 finish()
             }
         }
@@ -81,15 +88,16 @@ class AddEditActivity : AppCompatActivity() {
 
     private fun loadExistingTrip(id: Long) {
 
-        val trip = AppData.bookedtrips.findOne(id)
+        Timber.d("Loading existing trip id=$id")
 
+        val trip = AppData.bookedTrips.findOne(id)
         if (trip == null) {
+            Timber.w("Trip not found: id=$id")
             Toast.makeText(
                 this,
                 "Trip not found",
                 Toast.LENGTH_SHORT
             ).show()
-
             finish()
             return
         }
@@ -98,35 +106,47 @@ class AddEditActivity : AppCompatActivity() {
         budgetInput.setText(trip.budget.toString())
         startDateInput.setText(trip.startDate)
         endDateInput.setText(trip.endDate)
+
+        Timber.d("Trip loaded successfully: id=$id")
     }
 
     private fun saveTrip() {
 
-        val destination = destinationInput.text.toString().trim()
-        val budget = budgetInput.text.toString().trim().toDoubleOrNull()
-        val startDate = startDateInput.text.toString().trim()
-        val endDate = endDateInput.text.toString().trim()
+        val destination =
+            destinationInput.text.toString().trim()
+
+        val budget =
+            budgetInput.text.toString().trim().toDoubleOrNull()
+
+        val startDate =
+            startDateInput.text.toString().trim()
+
+        val endDate =
+            endDateInput.text.toString().trim()
 
         if (destination.isEmpty()) {
+            Timber.w("Validation failed: Destination is empty")
             destinationInput.error = "Destination is required"
             return
         }
 
         if (budget == null || budget < 0) {
+            Timber.w("Validation failed: Invalid budget")
             budgetInput.error = "Enter a valid budget"
             return
         }
 
         if (startDate.isEmpty()) {
+            Timber.w("Validation failed: Start date is empty")
             startDateInput.error = "Start date is required"
             return
         }
 
         if (endDate.isEmpty()) {
+            Timber.w("Validation failed: End date is empty")
             endDateInput.error = "End date is required"
             return
         }
-
 
         if (editingId == null || editingId == -1L) {
 
@@ -137,7 +157,10 @@ class AddEditActivity : AppCompatActivity() {
                 endDate = endDate
             )
 
-            AppData.bookedtrips.create(trip)
+            AppData.bookedTrips.create(trip)
+
+            // Timber logging
+            Timber.d("New trip created: id=${trip.id}")
 
             Toast.makeText(
                 this,
@@ -155,7 +178,10 @@ class AddEditActivity : AppCompatActivity() {
                 endDate = endDate
             )
 
-            AppData.bookedtrips.update(trip)
+            AppData.bookedTrips.update(trip)
+
+            // Timber logging
+            Timber.d("Existing trip updated: id=${trip.id}")
 
             Toast.makeText(
                 this,
@@ -163,7 +189,6 @@ class AddEditActivity : AppCompatActivity() {
                 Toast.LENGTH_SHORT
             ).show()
         }
-
         finish()
     }
 }

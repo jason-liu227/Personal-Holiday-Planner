@@ -24,7 +24,7 @@ class TripListActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         adapter = TripAdapter(
-            trips = AppData.bookedtrips.findAll(),
+            trips = AppData.bookedTrips.findAll(),
 
             listener = object : OnTripListener {
 
@@ -60,7 +60,7 @@ class TripListActivity : AppCompatActivity() {
 
         if (::adapter.isInitialized) {
             adapter.updateTrips(
-                AppData.bookedtrips.findAll()
+                AppData.bookedTrips.findAll()
             )
         }
     }
@@ -101,10 +101,10 @@ class TripListActivity : AppCompatActivity() {
 
     private fun deleteTrip(trip: TripModel) {
 
-        AppData.bookedtrips.delete(trip.id)
+        AppData.bookedTrips.delete(trip.id)
 
         adapter.updateTrips(
-            AppData.bookedtrips.findAll()
+            AppData.bookedTrips.findAll()
         )
 
         Timber.d("Deleted trip id=${trip.id}")
