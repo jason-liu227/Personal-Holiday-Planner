@@ -8,6 +8,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.personal_holiday_planner.models.TripModel
 import timber.log.Timber
+import android.widget.ImageView
+import androidx.activity.result.contract.ActivityResultContracts
+import android.net.Uri
+
 
 class AddEditActivity : AppCompatActivity() {
 
@@ -15,16 +19,57 @@ class AddEditActivity : AppCompatActivity() {
     private lateinit var budgetInput: EditText
     private lateinit var startDateInput: EditText
     private lateinit var endDateInput: EditText
-
+    private lateinit var imagePreview: ImageView
+    private var selectedImageUri: Uri? = null
     private var editingId: Long? = null
 
+     val imagePicker =
+        registerForActivityResult(
+            ActivityResultContracts.OpenDocument()
+        ) { uri: Uri? ->
+            if (uri != null) {
+                try {
+                    contentResolver.takePersistableUriPermission(
+                        uri,
+                        android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    )
+                } catch (e: SecurityException) {
+                    Timber.w("Unable to retain image permission")
+                }
+                selectedImageUri = uri
+                imagePreview.setImageURI(uri)
+                Timber.d("Holiday image selected")
+            }
+        }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Timber logging
-        Timber.d("AddEditActivity opened")
+        setContentView(R.layout.activity_add_edit)
 
-        createUserInterface()
+        Timber.d("AddEditActivity opened")
+        destinationInput = findViewById(R.id.destinationInput)
+        budgetInput = findViewById(R.id.budgetInput)
+        startDateInput = findViewById(R.id.startDateInput)
+        endDateInput = findViewById(R.id.endDateInput)
+        imagePreview = findViewById(R.id.imageViewAdd)
+        findViewById<Button>(R.id.imagePickButton)
+            .setOnClickListener {
+                imagePicker.launch(arrayOf("image/*"))
+            }
+
+        val saveButton = findViewById<Button>(R.id.saveButton)
+        val cancelButton = findViewById<Button>(R.id.cancelButton)
+
+        saveButton.setOnClickListener {
+            Timber.d("Save Trip button clicked")
+            saveTrip()
+        }
+
+        cancelButton.setOnClickListener {
+            Timber.d("Trip form cancelled")
+            finish()
+        }
+
         editingId = intent.getLongExtra("id", -1L)
         if (editingId != -1L) {
             Timber.d("Editing trip id=$editingId")
@@ -32,58 +77,6 @@ class AddEditActivity : AppCompatActivity() {
         } else {
             Timber.d("Creating a new holiday trip")
         }
-    }
-
-    private fun createUserInterface() {
-
-        val root = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setPadding(32, 320, 32, 32)
-        }
-
-        destinationInput = EditText(this).apply {
-            hint = "Destination"
-        }
-
-        budgetInput = EditText(this).apply {
-            hint = "Budget"
-            inputType =
-                android.text.InputType.TYPE_CLASS_NUMBER or
-                        android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL
-        }
-
-        startDateInput = EditText(this).apply {
-            hint = "Start Date (e.g. 2026-10-20)"
-        }
-
-        endDateInput = EditText(this).apply {
-            hint = "End Date (e.g. 2026-10-27)"
-        }
-
-        val saveButton = Button(this).apply {
-            text = "Save Trip"
-            setOnClickListener {
-                Timber.d("Save Trip button clicked")
-                saveTrip()
-            }
-        }
-
-        val cancelButton = Button(this).apply {
-            text = "Cancel"
-            setOnClickListener {
-                Timber.d("Trip form cancelled")
-                finish()
-            }
-        }
-
-        root.addView(destinationInput)
-        root.addView(budgetInput)
-        root.addView(startDateInput)
-        root.addView(endDateInput)
-        root.addView(saveButton)
-        root.addView(cancelButton)
-
-        setContentView(root)
     }
 
     private fun loadExistingTrip(id: Long) {
