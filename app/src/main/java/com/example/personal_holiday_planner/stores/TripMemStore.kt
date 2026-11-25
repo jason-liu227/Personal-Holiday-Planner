@@ -20,19 +20,22 @@ class TripMemStore : TripStore {
     }
 
     override fun create(trip: TripModel) {
+        trip.validate()
         trip.id = lastId.incrementAndGet()
         trips.add(trip)
         Timber.d("Created trip id=${trip.id}")
     }
 
     override fun update(trip: TripModel): Boolean {
-        val foundTrip = findOne(trip.id)
+        trip.validate()
 
+        val foundTrip = findOne(trip.id)
         return if (foundTrip != null) {
             foundTrip.destination = trip.destination
             foundTrip.startDate = trip.startDate
             foundTrip.endDate = trip.endDate
             foundTrip.budget = trip.budget
+            foundTrip.imageUri = trip.imageUri
 
             Timber.d("Updated trip id=${trip.id}")
             true

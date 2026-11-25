@@ -7,6 +7,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.personal_holiday_planner.models.TripModel
 import timber.log.Timber
+import android.widget.ImageView
+import android.net.Uri
 
 class TripAdapter(
     private var trips: List<TripModel>,
@@ -24,6 +26,8 @@ class TripAdapter(
 
         val dateText: TextView =
             itemView.findViewById(R.id.dateText)
+        val tripImage: ImageView =
+            itemView.findViewById(R.id.tripImage)
     }
 
     override fun onCreateViewHolder(
@@ -49,6 +53,21 @@ class TripAdapter(
 
         holder.dateText.text =
             "${trip.startDate} - ${trip.endDate}"
+
+        val imageUri = trip.imageUri?.let {
+            Uri.parse(it)
+        }
+
+        if (imageUri != null) {
+
+            holder.tripImage.setImageURI(imageUri)
+
+        } else {
+
+            holder.tripImage.setImageResource(
+                android.R.drawable.ic_menu_gallery
+            )
+        }
 
         holder.itemView.setOnClickListener {
             val currentPosition = holder.bindingAdapterPosition

@@ -99,6 +99,17 @@ class AddEditActivity : AppCompatActivity() {
         budgetInput.setText(trip.budget.toString())
         startDateInput.setText(trip.startDate)
         endDateInput.setText(trip.endDate)
+        selectedImageUri = trip.imageUri?.let {
+            Uri.parse(it)
+        }
+
+        if (selectedImageUri != null) {
+            imagePreview.setImageURI(selectedImageUri)
+        } else {
+            imagePreview.setImageResource(
+                android.R.drawable.ic_menu_gallery
+            )
+        }
 
         Timber.d("Trip loaded successfully: id=$id")
     }
@@ -118,68 +129,85 @@ class AddEditActivity : AppCompatActivity() {
             endDateInput.text.toString().trim()
 
         if (destination.isEmpty()) {
-            Timber.w("Validation failed: Destination is empty")
+
+            Timber.w("Validation failed: Empty destination")
             destinationInput.error = "Destination is required"
             return
         }
 
-        if (budget == null || budget < 0) {
+        if (budget == null || !budget.isFinite() || budget < 0) {
             Timber.w("Validation failed: Invalid budget")
             budgetInput.error = "Enter a valid budget"
             return
         }
 
         if (startDate.isEmpty()) {
-            Timber.w("Validation failed: Start date is empty")
             startDateInput.error = "Start date is required"
             return
         }
 
         if (endDate.isEmpty()) {
-            Timber.w("Validation failed: End date is empty")
             endDateInput.error = "End date is required"
             return
         }
 
-        if (editingId == null || editingId == -1L) {
+        try {
+            if (editingId == null || editingId == -1L) {
 
-            val trip = TripModel(
-                destination = destination,
-                budget = budget,
-                startDate = startDate,
-                endDate = endDate
-            )
+                val trip = TripModel(
+                    destination = destination,
+                    budget = budget,
+                    startDate = startDate,
+                    endDate = endDate,
+                    imageUri = selectedImageUri?.toString()
+                )
 
-            AppData.bookedTrips.create(trip)
+                AppData.bookedTrips.create(trip)
 
-            // Timber logging
-            Timber.d("New trip created: id=${trip.id}")
+                Timber.d("New trip created: id=${trip.id}")
 
+                Toast.makeText(
+                    this,
+                    "Trip created",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+            } else {
+                val trip = TripModel(
+                    id = editingId!!,
+                    destination = destination,
+                    budget = budget,
+                    startDate = startDate,
+                    endDate = endDate,
+                    imageUri = selectedImageUri?.toString()
+                )
+
+                val updated = AppData.bookedTrips.update(trip)
+                if (!updated) {
+                    Toast.makeText(
+                        this,
+                        "Unable to update trip",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return
+                }
+
+                Timber.d("Existing trip updated: id=${trip.id}")
+                Toast.makeText(
+                    this,
+                    "Trip updated",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            finish()
+
+        } catch (e: IllegalArgumentException) {
+            Timber.w("Validation failed: ${e.message}")
             Toast.makeText(
                 this,
-                "Trip created",
-                Toast.LENGTH_SHORT
-            ).show()
-
-        } else {
-
-            val trip = TripModel(
-                id = editingId!!,
-                destination = destination,
-                budget = budget,
-                startDate = startDate,
-                endDate = endDate
-            )
-
-            AppData.bookedTrips.update(trip)
-
-            // Timber logging
-            Timber.d("Existing trip updated: id=${trip.id}")
-
-            Toast.makeText(
-                this,
-                "Trip updated",
-                Toast.LENGTH_SHORT
+                e.message ?: "Please check the entered values.",
+                Toast.LENGTH_LONG
             ).show()
         }
         finish()
