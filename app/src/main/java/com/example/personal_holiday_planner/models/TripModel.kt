@@ -10,8 +10,9 @@ data class TripModel(
     var startDate: String = "",
     var endDate: String = "",
     var budget: Double = 0.0,
-    var imageUri: String? = null
-
+    var imageUri: String? = null,
+    var latitude: Double = 0.0,
+    var longitude: Double = 0.0
 ) {
 
     fun validate() {
@@ -34,6 +35,14 @@ data class TripModel(
 
         require(endDate >= startDate) {
             "End date cannot be before start date."
+        }
+
+        require(latitude.isFinite() && latitude in -90.0..90.0) {
+            "Latitude must be between -90 and 90."
+        }
+
+        require(longitude.isFinite() && longitude in -180.0..180.0) {
+            "Longitude must be between -180 and 180."
         }
     }
 
