@@ -105,6 +105,18 @@ class AddEditActivity : AppCompatActivity() {
             finish()
         }
 
+        findViewById<Button>(R.id.buttonLoc).setOnClickListener {
+
+            Timber.d("Location button clicked")
+
+            val intent = Intent(
+                this,
+                MapPickerActivity::class.java
+            )
+
+            mapPicker.launch(intent)
+        }
+
         editingId = intent.getLongExtra("id", -1L)
         if (editingId != -1L) {
             Timber.d("Editing trip id=$editingId")

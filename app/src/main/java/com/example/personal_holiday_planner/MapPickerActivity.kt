@@ -1,4 +1,3 @@
-
 package com.example.personal_holiday_planner
 
 import android.app.Activity
@@ -25,7 +24,8 @@ class MapPickerActivity : AppCompatActivity() {
 
         Timber.d("MapPickerActivity opened")
 
-        Configuration.getInstance().userAgentValue = packageName
+        Configuration.getInstance().userAgentValue =
+            "PersonalHolidayPlanner/1.0 ($packageName)"
 
         setContentView(R.layout.activity_map_picker)
 
