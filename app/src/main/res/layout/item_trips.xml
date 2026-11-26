@@ -55,5 +55,21 @@
             android:textSize="14sp"
             tools:text="2027-06-12 - 2027-06-19" />
 
+        <TextView
+            android:id="@+id/latitudeText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/planner_secondary"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/longitudeText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/planner_secondary"
+            android:textSize="14sp" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -26,8 +26,15 @@ class TripAdapter(
 
         val dateText: TextView =
             itemView.findViewById(R.id.dateText)
+
         val tripImage: ImageView =
             itemView.findViewById(R.id.tripImage)
+
+        val latitudeText: TextView =
+            itemView.findViewById(R.id.latitudeText)
+
+        val longitudeText: TextView =
+            itemView.findViewById(R.id.longitudeText)
     }
 
     override fun onCreateViewHolder(
@@ -50,6 +57,14 @@ class TripAdapter(
         holder.destinationText.text = trip.destination
 
         holder.budgetText.text = "Budget: €${trip.budget}"
+
+        holder.latitudeText.text = "Latitude: ${trip.latitude}"
+
+        holder.longitudeText.text = "Longitude: ${trip.longitude}"
+
+        Timber.d(
+            "Displaying coordinates for trip id=${trip.id}"
+        )
 
         holder.dateText.text =
             "${trip.startDate} - ${trip.endDate}"

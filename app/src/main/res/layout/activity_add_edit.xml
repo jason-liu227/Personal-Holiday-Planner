@@ -61,6 +61,35 @@
                 android:minHeight="48dp"
                 android:textColor="#000000" />
 
+            <Button
+                android:id="@+id/buttonLoc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="@color/planner_teal"
+                android:text="Select Holiday Location"
+                android:textColor="@color/planner_white" />
+
+            <EditText
+                android:id="@+id/latitudeInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Latitude"
+                android:inputType="numberDecimal|numberSigned"
+                android:minHeight="48dp"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/longitudeInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:hint="Longitude"
+                android:inputType="numberDecimal|numberSigned"
+                android:minHeight="48dp"
+                android:textColor="#000000" />
+
             <EditText
                 android:id="@+id/budgetInput"
                 android:layout_width="match_parent"
@@ -109,6 +138,8 @@
                 android:backgroundTint="@color/planner_red"
                 android:text="Cancel"
                 android:textColor="@color/planner_white" />
+
+
 
         </LinearLayout>
     </ScrollView>

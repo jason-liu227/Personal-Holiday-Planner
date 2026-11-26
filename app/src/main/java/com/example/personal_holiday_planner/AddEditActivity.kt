@@ -3,7 +3,6 @@ package com.example.personal_holiday_planner
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.personal_holiday_planner.models.TripModel
@@ -11,7 +10,7 @@ import timber.log.Timber
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import android.net.Uri
-
+import android.content.Intent
 
 class AddEditActivity : AppCompatActivity() {
 
@@ -20,8 +19,12 @@ class AddEditActivity : AppCompatActivity() {
     private lateinit var startDateInput: EditText
     private lateinit var endDateInput: EditText
     private lateinit var imagePreview: ImageView
+    private lateinit var latitudeInput: EditText
+    private lateinit var longitudeInput: EditText
     private var selectedImageUri: Uri? = null
     private var editingId: Long? = null
+    private var selectedLatitude: Double? = null
+    private var selectedLongitude: Double? = null
 
      val imagePicker =
         registerForActivityResult(
@@ -52,6 +55,8 @@ class AddEditActivity : AppCompatActivity() {
         startDateInput = findViewById(R.id.startDateInput)
         endDateInput = findViewById(R.id.endDateInput)
         imagePreview = findViewById(R.id.imageViewAdd)
+        latitudeInput = findViewById(R.id.latitudeInput)
+        longitudeInput = findViewById(R.id.longitudeInput)
         findViewById<Button>(R.id.imagePickButton)
             .setOnClickListener {
                 imagePicker.launch(arrayOf("image/*"))
@@ -59,6 +64,36 @@ class AddEditActivity : AppCompatActivity() {
 
         val saveButton = findViewById<Button>(R.id.saveButton)
         val cancelButton = findViewById<Button>(R.id.cancelButton)
+
+        val mapPicker =
+            registerForActivityResult(
+                ActivityResultContracts.StartActivityForResult()
+            ) { result ->
+
+                if (result.resultCode == RESULT_OK) {
+
+                    val data = result.data
+                        ?: return@registerForActivityResult
+
+                    selectedLatitude =
+                        data.getDoubleExtra("latitude", 0.0)
+
+                    selectedLongitude =
+                        data.getDoubleExtra("longitude", 0.0)
+
+                    selectedLatitude?.let {
+                        latitudeInput.setText(it.toString())
+                    }
+
+                    selectedLongitude?.let {
+                        longitudeInput.setText(it.toString())
+                    }
+
+                    Timber.d(
+                        "Location selected: $selectedLatitude, $selectedLongitude"
+                    )
+                }
+            }
 
         saveButton.setOnClickListener {
             Timber.d("Save Trip button clicked")
@@ -68,6 +103,18 @@ class AddEditActivity : AppCompatActivity() {
         cancelButton.setOnClickListener {
             Timber.d("Trip form cancelled")
             finish()
+        }
+
+        findViewById<Button>(R.id.buttonLoc).setOnClickListener {
+
+            Timber.d("Location button clicked")
+
+            val intent = Intent(
+                this,
+                MapPickerActivity::class.java
+            )
+
+            mapPicker.launch(intent)
         }
 
         editingId = intent.getLongExtra("id", -1L)
@@ -102,6 +149,13 @@ class AddEditActivity : AppCompatActivity() {
         selectedImageUri = trip.imageUri?.let {
             Uri.parse(it)
         }
+        selectedLatitude = trip.latitude
+        selectedLongitude = trip.longitude
+
+        latitudeInput.setText(trip.latitude.toString())
+        longitudeInput.setText(trip.longitude.toString())
+
+        Timber.d("Location restored for trip id=${trip.id}")
 
         if (selectedImageUri != null) {
             imagePreview.setImageURI(selectedImageUri)
@@ -128,6 +182,12 @@ class AddEditActivity : AppCompatActivity() {
         val endDate =
             endDateInput.text.toString().trim()
 
+        val latitude =
+            latitudeInput.text.toString().trim().toDoubleOrNull()
+
+        val longitude =
+            longitudeInput.text.toString().trim().toDoubleOrNull()
+
         if (destination.isEmpty()) {
 
             Timber.w("Validation failed: Empty destination")
@@ -151,6 +211,16 @@ class AddEditActivity : AppCompatActivity() {
             return
         }
 
+        if (latitude == null) {
+            latitudeInput.error = "Select a valid latitude"
+            return
+        }
+
+        if (longitude == null) {
+            longitudeInput.error = "Select a valid longitude"
+            return
+        }
+
         try {
             if (editingId == null || editingId == -1L) {
 
@@ -159,7 +229,9 @@ class AddEditActivity : AppCompatActivity() {
                     budget = budget,
                     startDate = startDate,
                     endDate = endDate,
-                    imageUri = selectedImageUri?.toString()
+                    imageUri = selectedImageUri?.toString(),
+                    latitude = latitude,
+                    longitude = longitude
                 )
 
                 AppData.bookedTrips.create(trip)
@@ -179,7 +251,9 @@ class AddEditActivity : AppCompatActivity() {
                     budget = budget,
                     startDate = startDate,
                     endDate = endDate,
-                    imageUri = selectedImageUri?.toString()
+                    imageUri = selectedImageUri?.toString(),
+                    latitude = latitude,
+                    longitude = longitude
                 )
 
                 val updated = AppData.bookedTrips.update(trip)
