@@ -163,6 +163,12 @@ class AddEditActivity : AppCompatActivity() {
         val endDate =
             endDateInput.text.toString().trim()
 
+        val latitude =
+            latitudeInput.text.toString().trim().toDoubleOrNull()
+
+        val longitude =
+            longitudeInput.text.toString().trim().toDoubleOrNull()
+
         if (destination.isEmpty()) {
 
             Timber.w("Validation failed: Empty destination")
@@ -186,6 +192,16 @@ class AddEditActivity : AppCompatActivity() {
             return
         }
 
+        if (latitude == null) {
+            latitudeInput.error = "Select a valid latitude"
+            return
+        }
+
+        if (longitude == null) {
+            longitudeInput.error = "Select a valid longitude"
+            return
+        }
+
         try {
             if (editingId == null || editingId == -1L) {
 
@@ -194,7 +210,9 @@ class AddEditActivity : AppCompatActivity() {
                     budget = budget,
                     startDate = startDate,
                     endDate = endDate,
-                    imageUri = selectedImageUri?.toString()
+                    imageUri = selectedImageUri?.toString(),
+                    latitude = latitude,
+                    longitude = longitude
                 )
 
                 AppData.bookedTrips.create(trip)
@@ -214,7 +232,9 @@ class AddEditActivity : AppCompatActivity() {
                     budget = budget,
                     startDate = startDate,
                     endDate = endDate,
-                    imageUri = selectedImageUri?.toString()
+                    imageUri = selectedImageUri?.toString(),
+                    latitude = latitude,
+                    longitude = longitude
                 )
 
                 val updated = AppData.bookedTrips.update(trip)

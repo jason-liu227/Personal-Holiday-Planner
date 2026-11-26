@@ -36,6 +36,8 @@ class TripMemStore : TripStore {
             foundTrip.endDate = trip.endDate
             foundTrip.budget = trip.budget
             foundTrip.imageUri = trip.imageUri
+            foundTrip.latitude = trip.latitude
+            foundTrip.longitude = trip.longitude
 
             Timber.d("Updated trip id=${trip.id}")
             true
