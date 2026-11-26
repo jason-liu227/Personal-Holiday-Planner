@@ -137,6 +137,13 @@ class AddEditActivity : AppCompatActivity() {
         selectedImageUri = trip.imageUri?.let {
             Uri.parse(it)
         }
+        selectedLatitude = trip.latitude
+        selectedLongitude = trip.longitude
+
+        latitudeInput.setText(trip.latitude.toString())
+        longitudeInput.setText(trip.longitude.toString())
+
+        Timber.d("Location restored for trip id=${trip.id}")
 
         if (selectedImageUri != null) {
             imagePreview.setImageURI(selectedImageUri)
