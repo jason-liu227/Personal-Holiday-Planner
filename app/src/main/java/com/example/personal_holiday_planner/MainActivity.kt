@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         if (Timber.treeCount == 0) {
             Timber.plant(Timber.DebugTree())
         }
-
+        AppData.initialize(this)
         Timber.d("Personal Holiday Planner started")
 
         enableEdgeToEdge()
